@@ -1,0 +1,10 @@
+<h2>Font List</h2>
+<ul class="font-list">
+  <li *ngFor="let font of fonts" (click)="onSelect(font)" [class.selected]="selectedFonts[font.name]">
+    <span class="title" [style.font-family]="font.name">{{font.name}}</span>
+  </li>
+</ul>
+
+<div class="font-examples">
+  <font-detail *ngFor="let fontName of displayedFonts" [font]="findFontByName(fontName)"></font-detail>
+</div>

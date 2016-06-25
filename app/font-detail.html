@@ -1,0 +1,9 @@
+<div *ngIf="font.name" [style.font-family]="font.name" class="details">
+  
+  <div class="regular-body">
+    <div class="line normal">{{displayText}}</div>
+    <div class="line bold">{{displayText}}</div>
+    <div class="line italics">{{displayText}}</div>
+  </div>
+  <div class="large-body">{{displayText[displayText.length-1]}}</div>
+</div>
