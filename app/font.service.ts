@@ -9,14 +9,18 @@ declare var fontTest;
 @Injectable()
 export class FontService {
   
-  private fontsUrl = 'app/fonts';
+  private listPromise: Promise<Font[]> = null;
+  private fontsUrl: string = 'app/fonts';
   constructor(private http: Http) {}
 
   getFonts(): Promise<Font[]> {
-    return this.http.get(this.fontsUrl)
-      .toPromise()
-      .then(response => this.processList(response.json().data))
-      .catch(this.handleError);
+    if (!this.listPromise) {
+      this.listPromise = this.http.get(this.fontsUrl)
+        .toPromise()
+        .then(response => this.processList(response.json().data))
+        .catch(this.handleError);
+    }
+    return this.listPromise;
   }
 
   processList(fontList: Font[]) {
@@ -24,6 +28,7 @@ export class FontService {
     for (var font of fontList) {
       font.available = fontTest.isInstalled(font.name);
     }
+
     return fontList;
   }
   

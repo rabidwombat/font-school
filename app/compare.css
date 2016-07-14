@@ -1,0 +1,43 @@
+ul {
+  width: 300px;
+  height: 400px;
+  overflow-y: scroll;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  float: left;
+  background: #eee;
+  border-radius: 5px;
+}
+
+li {
+  margin: 0;
+  padding: 2px;
+}
+
+li span {
+  border-radius: 5px;
+  padding: 2px 5px;
+  cursor: pointer;
+}
+
+li.selected span {
+  background: #fff;
+}
+
+.font-examples {
+  width: 500px;
+  float: right;
+}
+
+.font-examples input {
+  font-size: 16px;
+  border: 0;
+  border-bottom: 1px solid blue;
+  width: 300px;
+  margin-bottom: 20px;
+}
+
+.font-examples input:focus {
+  outline: 0;
+}

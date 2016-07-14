@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router-deprecated';
 
 import { FontService } from './font.service';
-import { FontDetailComponent } from './font-detail.component';
+import { SnippetComponent } from './snippet.component';
 import { Font } from './font';
 
 @Component({
-  directives: [FontDetailComponent],
-  selector: 'my-fonts',
-  templateUrl: 'app/fonts.html'
+  directives: [SnippetComponent],
+  selector: 'font-list',
+  templateUrl: 'app/test.html'
 })
 
-export class FontsComponent implements OnInit {
+export class TestComponent implements OnInit {
   fonts: Font[];
   selectedFonts: Font[];
   displayedFonts: string[];
@@ -63,7 +63,6 @@ export class FontsComponent implements OnInit {
 
   displayFont(fontName) {
     if (this.displayedFonts.length == this.maxDisplayedFonts) {
-      console.log('too many selected!');
       this.unselectFont(this.displayedFonts.shift());
     }
     this.displayedFonts.push(fontName);

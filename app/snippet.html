@@ -1,0 +1,6 @@
+<div *ngIf="font.name" [style.font-family]="font.name" class="snippet">
+  <div class="regular-body">
+    <div class="name">{{font.name}}</div>
+    <textarea [style.font-family]="font.name" [(ngModel)]="displayText" (keyup)="onKeyup(displayText)" ></textarea>
+  </div>
+</div>

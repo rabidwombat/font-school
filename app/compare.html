@@ -1,0 +1,10 @@
+<h2>Compare page</h2>
+<ul class="font-list">
+  <li *ngFor="let font of fonts" (click)="onSelect(font)" [class.selected]="selectedFonts[font.name]">
+    <span class="title" [style.font-family]="font.name">{{font.name}}</span>
+  </li>
+</ul>
+
+<div class="font-examples">
+  <snippet *ngFor="let fontName of displayedFonts" [font]="findFontByName(fontName)" [displayText]="compareText" (updateText)="onUpdate($event)" ></snippet>
+</div>

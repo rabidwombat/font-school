@@ -2,7 +2,7 @@
   "name": "font-school",
   "version": "1.0.0",
   "scripts": {
-    "start": "rm -rf dist/ && concurrently \"npm run tsc:w\" \"npm run lite\" ",
+    "start": "rm -rf dist/ && npm run tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
     "lite": "lite-server",
     "postinstall": "typings install",
     "tsc": "tsc -outDir dist --rootDir app",

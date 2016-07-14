@@ -1,7 +1,9 @@
 <h1>{{title}}</h1>
 
 <nav>
-  <a [routerLink]="['Fonts']">Font List</a>
+  <a [routerLink]="['List']" routerLinkActive>All My Fonts</a>
+  <a [routerLink]="['Compare']" routerLinkActive>Compare Fonts</a>
+  <a [routerLink]="['Test']" routerLinkActive>NOT IMPLEMENTED YET</a>
 </nav>
 <router-outlet></router-outlet>
 <div class="test-bed"></div>
