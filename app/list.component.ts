@@ -8,50 +8,23 @@ import { Font } from './font';
 @Component({
   directives: [SnippetComponent],
   selector: 'font-list',
+  styleUrls: [ 'app/list.css' ],
   templateUrl: 'app/list.html'
 })
 
 export class ListComponent implements OnInit {
-  fonts: Font[];
+  fonts: Font[] = [];
   error: any;
-  quotes: string[] = [
-    'So much of life is cobbled together when plans go awry.  That is often where happiness comes from.',
-    'Only humans dread.  Dread is appropriate to nothing.  It\'s the surplus of animal fear, it\'s never indicated, it\'s nothing but itself.',
-    'Most of the time what our patients need is a compassionate, rigorous, sympathetic interlocutor. Sometimes ' +
-    'the externalized trauma-vectors in dysfunctional interpersonal codependent psychodynamics are powerful enough ' +
-    'that more robust therapeutic intervention is necessary. I checked my ammunition.',
-    '\"Our opponent is an alien starship packed with atomic bombs,\" I said. \"We have a protractor.\"'
-  ]
 
   constructor(private fontService: FontService, private router: Router) { 
   }
-  
-  getRandomQuote() {
-    return this.quotes[(Math.floor(Math.random() * this.quotes.length))];
-  }
+
   getFonts() { 
-    this.fontService.getFonts().then(fonts => this.fonts = this.randomizeOrder(this.checkAvailability(fonts))) 
+    this.fontService.getRandomizedFonts().then(fonts => this.fonts = this.checkAvailability(fonts)); 
   }
 
   ngOnInit() {
     this.getFonts();
-  }
-
-  randomizeOrder(fonts: Font[]) {
-    let currentIndex: number = fonts.length,
-    tempValue: Font,
-    randomIndex: number;
-
-    while (0 !== currentIndex) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-
-      tempValue = fonts[currentIndex];
-      fonts[currentIndex] = fonts[randomIndex];
-      fonts[randomIndex] = tempValue;
-    }
-
-    return fonts;
   }
 
   orderFontsByName(fonts: Font[]) {

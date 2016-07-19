@@ -12,19 +12,19 @@ import { Font } from './font';
 })
 
 export class TestComponent implements OnInit {
-  fonts: Font[];
-  selectedFonts: Font[];
-  displayedFonts: string[];
+  availableFonts: Font[];
+  similarFonts: Font[];
+  testingFonts: Font[];
+  selectedFont: Font;
+  displayedFonts: Font[];
   maxDisplayedFonts = 3;
   error: any;
 
   constructor(private fontService: FontService, private router: Router) { 
-    this.selectedFonts = [];
-    this.displayedFonts = [];
   }
   
   getFonts() { 
-    this.fontService.getFonts().then(fonts => this.fonts = this.orderFontsByName(this.checkAvailability(fonts))) 
+    this.fontService.getFonts().then(fonts => this.availableFonts = this.orderFontsByName(this.checkAvailability(fonts))); 
   }
 
   ngOnInit() {
@@ -43,42 +43,37 @@ export class TestComponent implements OnInit {
     return fonts.filter(font => font.available);
   }
 
-  onSelect(font: Font) {
-    if (this.selectedFonts[font.name]) {
-      this.unselectFont(font.name);
-      this.hideFont(font.name);
-    } else {
-      this.selectFont(font.name);
-      this.displayFont(font.name);
+  onChange(fontId: number) {
+    this.setFontToTest(this.getFontById(Number(fontId));
+  }
+
+  setFontToTest(testingFont) {
+    this.selectedFont = testingFont;
+    this.similarFonts = this.availableFonts.filter(font => this.areFontsSimilar(font, testingFont));
+    console.log(this.similarFonts);
+    this.resetForm();
+  }
+
+  private areFontsSimilar(font1, font2) {
+    return (font1.isSerif == font2.isSerif && font1.monospace == font2.monospace && font1.id != font2.id);
+  }
+
+  resetForm() {
+    let testFont1 = this.getRandomFontFromList(this.similarFonts);
+    let testFont2 = testFont1;
+    while(testFont1 == testFont2) {
+      testFont2 = this.getRandomFontFromList(this.similarFonts);
     }
   }
 
-  selectFont(fontName: string) {
-    this.selectedFonts[fontName] = true;
+  getRandomFontFromList(list: Font[]): Font {
+    return list[Math.floor(Math.random() * list.length)];
   }
 
-  unselectFont(fontName: string) {
-    this.selectedFonts[fontName] = false;
+  getFontById(id: number): Font {
+    return this.availableFonts.find(font => font.id === id);
   }
 
-  displayFont(fontName) {
-    if (this.displayedFonts.length == this.maxDisplayedFonts) {
-      this.unselectFont(this.displayedFonts.shift());
-    }
-    this.displayedFonts.push(fontName);
-  }
+  
 
-  hideFont(fontName) {
-    var i = this.displayedFonts.indexOf(fontName);
-    if (i != -1) this.displayedFonts.splice(i, 1);
-  }
-
-  findFontByName(fontName) {
-    for (let font of this.fonts) {
-      if (font.name == fontName) {
-        return font;
-      }
-    }
-    return new Font();
-  }
 }

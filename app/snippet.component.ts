@@ -12,13 +12,21 @@ import { Font } from './font';
 
 export class SnippetComponent {
   @Input() font: Font;
-  @Input() displayText: string = 'Lazy brown fox and dumb ? 653';
+  @Input() displayText: string = null;
+  @Input() showName: boolean = true;
   @Output() updateText: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(
     private fontService: FontService,
     private routeParams: RouteParams) {
-  
+    
+    if (this.displayText == null) {
+      this.getQuote();
+    }
+  }
+
+  getQuote() {
+    this.fontService.getRandomQuote().then(quote => this.displayText = quote);
   }
 
   onKeyup(text) {

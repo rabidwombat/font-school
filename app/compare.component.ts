@@ -31,7 +31,7 @@ export class CompareComponent implements OnInit {
   constructor(private fontService: FontService, private router: Router) { 
     this.selectedFonts = [];
     this.displayedFonts = [];
-    this.compareText = this.quotes[Math.floor(Math.random() * this.quotes.length)]];
+    this.compareText = this.quotes[Math.floor(Math.random() * this.quotes.length)];
   }
   
   getFonts() { 

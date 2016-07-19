@@ -24,10 +24,18 @@ export class InMemoryDataService {
       { id: 30, name: "American Typewriter", isSerif: true, monospace: false },
       { id: 31, name: "Noteworthy Light", isSerif: true, monospace: false },
       { id: 32, name: "Playbill", isSerif: true, monospace: false },
-      { id: 33, name: "Onyx", isSerif: true, monospace: false },
-
+      { id: 33, name: "Onyx", isSerif: true, monospace: false }
     ];
-    return {fonts};
+
+    let quotes = [
+      'So much of life is cobbled together when plans go awry.  That is often where happiness comes from.',
+      'Only humans dread.  Dread is appropriate to nothing.  It\'s the surplus of animal fear, it\'s never indicated, it\'s nothing but itself.',
+      'Most of the time what our patients need is a compassionate, rigorous, sympathetic interlocutor. Sometimes ' +
+      'the externalized trauma-vectors in dysfunctional interpersonal codependent psychodynamics are powerful enough ' +
+      'that more robust therapeutic intervention is necessary. I checked my ammunition.',
+      '\"Our opponent is an alien starship packed with atomic bombs,\" I said. \"We have a protractor.\"'
+    ];
+
+    return {fonts, quotes};
   }
 }
-

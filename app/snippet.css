@@ -1,9 +1,14 @@
 .snippet {
   position: relative;
   height: 155px;
-  width: 400px;
+  width: 100%;
   margin-bottom: 20px;
 }
+
+.name {
+  margin-left: 5px;
+}
+
 .regular-body {
   border-radius: 10px;
   background: #eee;

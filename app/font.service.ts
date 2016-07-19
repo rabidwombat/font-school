@@ -9,32 +9,71 @@ declare var fontTest;
 @Injectable()
 export class FontService {
   
-  private listPromise: Promise<Font[]> = null;
+  private fontsPromise: Promise<Font[]> = null;
+  private quotesPromise: Promise<string[]> = null;
   private fontsUrl: string = 'app/fonts';
+  private quotesUrl: string = 'app/quotes';
   constructor(private http: Http) {}
 
   getFonts(): Promise<Font[]> {
-    if (!this.listPromise) {
-      this.listPromise = this.http.get(this.fontsUrl)
+    if (!this.fontsPromise) {
+      this.fontsPromise = this.http.get(this.fontsUrl)
         .toPromise()
         .then(response => this.processList(response.json().data))
         .catch(this.handleError);
     }
-    return this.listPromise;
+    return this.fontsPromise;
   }
 
-  processList(fontList: Font[]) {
+  getQuotes(): Promise<string[]> {
+    if (!this.quotesPromise) {
+      this.quotesPromise = this.http.get(this.quotesUrl)
+        .toPromise()
+        .then(response => response.json().data)
+        .catch(this.handleError);
+    }
+    return this.quotesPromise;
+  }
+
+  getRandomQuote(): Promise<string> {
+    return this.getQuotes().then(quotes => quotes[Math.floor(Math.random() * quotes.length)])
+      .catch(this.handleError);
+  }
+
+  getRandomizedFonts(): Promise<Font[]> {
+    return this.getFonts()
+      .then(fonts => this.randomizeOrder(fonts));
+  }
+
+  getFontByName(name: string): Promise<Font> {
+    return this.getFonts()
+      .then(fonts => fonts.filter(font => font.name === name)[0]);
+  }
+
+  private randomizeOrder(fonts: Font[]): Font[] {
+    let currentIndex: number = fonts.length,
+    tempValue: Font,
+    randomIndex: number;
+
+    while (0 !== currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      tempValue = fonts[currentIndex];
+      fonts[currentIndex] = fonts[randomIndex];
+      fonts[randomIndex] = tempValue;
+    }
+
+    return fonts;
+  }
+  
+  private processList(fontList: Font[]): Font[] {
     fontTest.setup();
     for (var font of fontList) {
       font.available = fontTest.isInstalled(font.name);
     }
 
     return fontList;
-  }
-  
-  getFont(name: string) {
-    return this.getFonts()
-      .then(fonts => fonts.filter(font => font.name === name)[0]);
   }
 
   private handleError(error: any) {
