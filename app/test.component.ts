@@ -17,7 +17,7 @@ export class TestComponent implements OnInit {
   testingFonts: Font[];
   selectedFont: Font;
   displayedFonts: Font[];
-  maxDisplayedFonts = 3;
+  
   error: any;
 
   constructor(private fontService: FontService, private router: Router) { 
@@ -44,13 +44,12 @@ export class TestComponent implements OnInit {
   }
 
   onChange(fontId: number) {
-    this.setFontToTest(this.getFontById(Number(fontId));
+    this.setFontToTest(this.getFontById(Number(fontId)));
   }
 
   setFontToTest(testingFont) {
     this.selectedFont = testingFont;
     this.similarFonts = this.availableFonts.filter(font => this.areFontsSimilar(font, testingFont));
-    console.log(this.similarFonts);
     this.resetForm();
   }
 
@@ -59,11 +58,13 @@ export class TestComponent implements OnInit {
   }
 
   resetForm() {
+    if (this.similarFonts.length < 2) { return; } // error - should handle this
     let testFont1 = this.getRandomFontFromList(this.similarFonts);
     let testFont2 = testFont1;
     while(testFont1 == testFont2) {
       testFont2 = this.getRandomFontFromList(this.similarFonts);
     }
+    this.testingFonts = this.randomizeOrder([this.selectedFont, testFont1, testFont2]);
   }
 
   getRandomFontFromList(list: Font[]): Font {
@@ -74,6 +75,21 @@ export class TestComponent implements OnInit {
     return this.availableFonts.find(font => font.id === id);
   }
 
-  
+  randomizeOrder(list: Font[]) {
+    let currentIndex = list.length, temporaryValue, randomIndex;
+
+    while (0 !== currentIndex) {
+
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      temporaryValue = list[currentIndex];
+      list[currentIndex] = list[randomIndex];
+      list[randomIndex] = temporaryValue;
+    }
+
+    return list;
+  }
+
 
 }

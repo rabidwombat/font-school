@@ -3,4 +3,8 @@
   <option value="undefined">--Choose a font--</option>
   <option *ngFor="let font of availableFonts" [value]="font.id">{{font.name}}</option>
 </select>
-<div *ngIf="selectedFont">{{selectedFont.name}}</div>
+<div *ngIf="selectedFont">
+  <div *ngFor="let font of testingFonts">
+    <snippet [font]="font" [showName]=false ></snippet>
+  </div>
+</div>
