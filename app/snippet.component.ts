@@ -14,19 +14,22 @@ export class SnippetComponent {
   @Input() font: Font;
   @Input() displayText: string = null;
   @Input() showName: boolean = true;
+  @Input()
+  set fontSize(size: string) {
+    this._fontSize = size;
+  } 
   @Output() updateText: EventEmitter<string> = new EventEmitter<string>();
+  _fontSize: string;
 
   constructor(
     private fontService: FontService,
     private routeParams: RouteParams) {
-    
-    if (this.displayText == null) {
-      this.getQuote();
-    }
+    this.setInitialQuote();
   }
 
-  getQuote() {
-    this.fontService.getRandomQuote().then(quote => this.displayText = quote);
+  setInitialQuote() {
+    // only set the quote from the promise IF no quote is already set
+    this.fontService.getRandomQuote().then(quote => this.displayText = (this.displayText == null ? quote : this.displayText));
   }
 
   onKeyup(text) {

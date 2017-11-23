@@ -14,32 +14,38 @@ import { Font } from './font';
 
 export class CompareComponent implements OnInit {
   fonts: Font[];
+  defaultFontSize: string;
+  fontSize: string;
   selectedFonts: Font[];
   displayedFonts: string[];
   maxDisplayedFonts = 3;
   compareText: string;
-  quotes: string[] = [
-    'So much of life is cobbled together when plans go awry.  That is often where happiness comes from.',
-    'Only humans dread.  Dread is appropriate to nothing.  It\'s the surplus of animal fear, it\'s never indicated, it\'s nothing but itself.',
-    'Most of the time what our patients need is a compassionate, rigorous, sympathetic interlocutor. Sometimes ' +
-    'the externalized trauma-vectors in dysfunctional interpersonal codependent psychodynamics are powerful enough ' +
-    'that more robust therapeutic intervention is necessary. I checked my ammunition.',
-    '\"Our opponent is an alien starship packed with atomic bombs,\" I said. \"We have a protractor.\"'
-  ]
   error: any;
+  fontConditions: {} = {};
 
   constructor(private fontService: FontService, private router: Router) { 
     this.selectedFonts = [];
     this.displayedFonts = [];
-    this.compareText = this.quotes[Math.floor(Math.random() * this.quotes.length)];
+    this.resetQuote();
+    this.fontSize = this.defaultFontSize = '14px';
   }
   
-  getFonts() { 
-    this.fontService.getFonts().then(fonts => this.fonts = this.orderFontsByName(this.checkAvailability(fonts))) 
+  getAvailableFonts() { 
+    this.fontService.getFonts().then(fonts => this.fonts = this.orderFontsByName(this.checkAvailability(fonts)));
   }
 
   ngOnInit() {
-    this.getFonts();
+    this.getAvailableFonts();
+  }
+
+  resetFontsWithConditions(conditions: Function[]) {
+    this.fontService.getFonts().then(fonts => this.fonts = this.orderFontsByName(this.applyConditions(this.checkAvailability(fonts), this.fontConditions)));
+  }
+
+  applyConditions(fonts: Font[], conditions: {}) {
+    var tempFonts = fonts;
+    Object.keys(conditions).forEach((c) => tempFonts = tempFonts.filter(conditions[c]));
+    return tempFonts;
   }
 
   orderFontsByName(fonts: Font[]) {
@@ -48,6 +54,14 @@ export class CompareComponent implements OnInit {
       if (f1.name < f2.name) return -1;
       return 0;
     });
+  }
+
+  resetQuote() {
+    this.fontService.getRandomQuote().then(quote => this.compareText = quote);
+  }
+
+  changeSize() {
+  console.log(this.fontSize);
   }
 
   checkAvailability(fonts: Font[]) {
@@ -65,7 +79,7 @@ export class CompareComponent implements OnInit {
   }
 
   onUpdate(text) {
-    this.compareText = text;
+    //this.compareText = text;
   }
 
   selectFont(fontName: string) {
@@ -95,5 +109,40 @@ export class CompareComponent implements OnInit {
       }
     }
     return new Font();
+  }
+
+  updateMono(event) {
+    if (event.target.value == 'all') {
+      event.target.innerHTML = 'Monospace Only';
+      event.target.value = 'mono';
+      this.fontConditions.mono = (f) => f.monospace == true;
+    } else if (event.target.value == 'mono') {
+      event.target.innerHTML = 'Non-Monospace';
+      event.target.value = 'nomono';
+      this.fontConditions.mono = (f) => f.monospace == false;
+    } else {
+      event.target.innerHTML = 'All Spacing';
+      event.target.value = 'all';
+      this.fontConditions.mono = (f) => true;
+    }
+    this.resetFontsWithConditions();
+    console.log(this.fonts);
+  }
+
+  updateSerif(event) {
+    if (event.target.value == 'all') {
+      event.target.innerHTML = 'Serifs Only';
+      event.target.value = 'serif';
+      this.fontConditions.serif = (f) => f.isSerif == true;
+    } else if (event.target.value == 'serif') {
+      event.target.innerHTML = 'No Serifs';
+      event.target.value = 'noserif';
+      this.fontConditions.serif = (f) => f.isSerif == false;
+    } else {
+      event.target.innerHTML = 'Serif & Sans';
+      event.target.value = 'all';
+      this.fontConditions.serif = (f) => true;
+    }
+    this.resetFontsWithConditions();
   }
 }

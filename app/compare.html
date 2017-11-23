@@ -1,3 +1,7 @@
+<div class="font-examples">
+  <snippet *ngFor="let fontName of displayedFonts" [font]="findFontByName(fontName)" [fontSize]="fontSize" [displayText]="compareText" (updateText)="onUpdate($event)" ></snippet>
+</div>
+
 <h2>Compare page</h2>
 <ul class="font-list">
   <li *ngFor="let font of fonts" (click)="onSelect(font)" [class.selected]="selectedFonts[font.name]">
@@ -5,6 +9,13 @@
   </li>
 </ul>
 
-<div class="font-examples">
-  <snippet *ngFor="let fontName of displayedFonts" [font]="findFontByName(fontName)" [displayText]="compareText" (updateText)="onUpdate($event)" ></snippet>
+<div class="font-options">
+  <button (click)="resetQuote()">New quote</button>
+  <select [(ngModel)]="fontSize" (change)="changeSize()">
+    <option value="{{defaultFontSize}}px">Choose font size</option>
+    <option *ngFor="let num of [10,12,14,16,18,22,26,30,36]">{{num}}px</option>
+  </select>
+  <br />
+  <button (click)="updateMono($event)" value="all">All Spacing</button>
+  <button (click)="updateSerif($event)" value="all">Serif & Sans</button>
 </div>
